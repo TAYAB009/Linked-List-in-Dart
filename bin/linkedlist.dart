@@ -1,3 +1,4 @@
+//next will store address of next node therefore it must be of type node
 class Node<T> {
   T value;
   Node<T>? next;
@@ -5,19 +6,43 @@ class Node<T> {
 
   @override
   String toString() {
-    if (next == null) {
-      print('Value: $value'); //value in last node
-    }
     return '$value-> ${next.toString()}';
   }
 }
 
-void main() {
-  final node1 = Node(value: 100);
-  final node2 = Node(value: 200);
-  final node3 = Node(value: 300);
-  node1.next = node2;
-  node2.next = node3;
-  //node3.next = null;
-  print(node1);
+class LinkedList<E> {
+  Node<E>? head;
+  Node<E>? tail;
+  //return true if head is null which mean list is empty
+  bool get isEmpty => head == null;
+
+  void addToStart(E e) {
+    head = Node(value: e, next: head);
+    tail = head;
+  }
+
+  void addToEnd(E value) {
+    if (isEmpty) {
+      addToStart(value);
+      return;
+    }
+    tail!.next = Node(value: value);
+    tail = tail!.next;
+  }
+
+  @override
+  String toString() {
+    if (isEmpty) return 'List is Empty';
+    return head.toString();
+  }
 }
+
+void main() {
+  final list = LinkedList();
+  list.addToEnd(10);
+  list.addToEnd(20);
+  list.addToEnd(30);
+
+  print(list);
+}
+//Here 40 will become the head node
