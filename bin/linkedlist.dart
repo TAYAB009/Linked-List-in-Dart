@@ -16,18 +16,43 @@ class LinkedList<E> {
   //return true if head is null which mean list is empty
   bool get isEmpty => head == null;
 
-  void addToStart(E e) {
+  void insertAtStart(E e) {
+    //New node with value e, addressing to head
     head = Node(value: e, next: head);
-    tail = head;
+    tail ??= head;
   }
 
-  void addToEnd(E value) {
+  void insertAtEnd(E value) {
     if (isEmpty) {
-      addToStart(value);
+      insertAtStart(value);
       return;
     }
     tail!.next = Node(value: value);
     tail = tail!.next;
+  }
+
+  //It find a node after which we want to insert new node
+  //it starts from head node to the node whose index is
+  //being passed
+
+  Node<E>? nodeAfter(int index) {
+    var currentNode = head;
+    var currentIndex = 0;
+
+    while (currentNode != null && currentIndex < index) {
+      currentNode = currentNode.next;
+      currentIndex += 1;
+    }
+    return currentNode;
+  }
+
+  Node<E> insertAfter(Node<E> node, E value) {
+    if (tail == node) {
+      insertAtEnd(value);
+      return tail!;
+    }
+    node.next = Node(value: value, next: node.next);
+    return node.next!;
   }
 
   @override
@@ -38,11 +63,13 @@ class LinkedList<E> {
 }
 
 void main() {
-  final list = LinkedList();
-  list.addToEnd(10);
-  list.addToEnd(20);
-  list.addToEnd(30);
+  final list = LinkedList<int>();
+  list.insertAtStart(3);
+  list.insertAtStart(2);
+  list.insertAtStart(1);
+  print('Before: $list');
 
-  print(list);
+  var middleNode = list.nodeAfter(2)!; //this will insert 42 after node index 1
+  list.insertAfter(middleNode, 42);
+  print('After: $list');
 }
-//Here 40 will become the head node
